@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home</title>
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="assets/SCSS/main.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <nav>
+        </nav>
+        <h3>
+            My Devices
+        </h3>
+        <div class="search">
+        </div>
+    </header>
+    <main class="warper">
+        <section id="devices" class="devices">
+            <ul>
+            </ul>
+        </section>
+    </main>
+
+
+
+    <script>
+        const devices = [
+            { state: "1", name: "Living room light" },
+            { state: "0", name: "Kitchen light" },
+            { state: "1", name: "Front door lights" },
+            { state: "0", name: "Garden lights" },
+        ];
+        const devicesContainer = document.getElementById("devices").querySelector("ul");
+        console.log(devicesContainer);
+
+        function switchClick(){
+            console.log(this);
+            console.log(this.parentElement.getAttribute("data-stat"));
+            if(this.parentElement.getAttribute("data-stat") == "1"){
+                this.parentElement.setAttribute("data-stat", "0");
+                this.innerHTML = "off";
+
+            }else {
+                this.parentElement.setAttribute("data-stat", "1");
+                this.innerHTML = "on";
+            }
+
+        };
+        function itemSetup(){
+            console.log(this);
+            console.log(this.parentElement);
+
+        };
+
+        devices.forEach((element,key) => {
+            let item = document.createElement("LI");
+            let itemSwitch = "off";
+            if(element.state == "1"){
+                itemSwitch = "on";
+            }            
+            item.innerHTML = '<span>' + element.name + '</span><div class="switch">' + itemSwitch + '</div>';
+            let att = document.createAttribute("data-stat");
+            att.value = element.state;
+            item.setAttributeNode(att);
+            devicesContainer.appendChild(item);
+            devicesContainer.querySelectorAll("li")[key].querySelector("span").addEventListener('click', itemSetup);
+            devicesContainer.querySelectorAll("li")[key].querySelector("div").addEventListener('click', switchClick);
+        })
+
+
+
+
+
+        const myImg = new Image();
+        myImg.crossOrigin = "Anonymous";
+        myImg.onload = () => {
+            const context = document.createElement('canvas').getContext('2d');
+            context.drawImage(myImg, 0, 0);
+            const {
+                data
+            } = context.getImageData(1, 1, 1, 1);
+            console.log(data)
+        }
+        //myImg.src = 'https://picsum.photos/200/300';
+        myImg.src = 'assets/images/test.png';
+    </script>
+</body>
+
+</html>

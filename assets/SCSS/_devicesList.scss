@@ -1,0 +1,47 @@
+.devices{
+    ul{
+        li{
+            background: $devicesButtonColor;
+            height: $devicesButtonH;
+            border-bottom: solid $defBorderSize $defBorderColor;            
+            font-family: $generalFont;
+            font-size: 14px;
+            font-weight: 500;
+            color: $devicesButtonFontColor;
+            line-height: $devicesButtonH;
+            display: grid;
+            grid-template-columns: $devicesButtonH auto 100px;
+            cursor: pointer;            
+            &::before{
+                content: "";
+                margin: 5px 0;
+            }
+            &[data-stat="0"]{                
+                &::before{
+                    @include icon-stat-off;
+                }
+                .switch{ 
+                    background-color: $switchButtonOffBg;
+                    color: $switchButtonOffFontColor;
+                }
+            }
+            &[data-stat="1"]{                
+                &::before{
+                    @include icon-stat-on;
+                }
+                .switch{ 
+                    background-color: $switchButtonOnBg;
+                    color: $switchButtonOnFontColor;
+                }
+            }
+            .switch{                
+                height: 20px;
+                margin: 15px 20px;
+                line-height: 20px;
+                text-align: center;
+                text-transform: uppercase; 
+                font-size: 12px;
+            }
+        }
+    }
+}

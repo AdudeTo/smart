@@ -143,12 +143,38 @@
             const {
                 data
             } = context.getImageData(pixelX, pixelY, 1, 1);
+            //console.log(data[0]);
+            //console.log(data[1]);
+            //console.log(data[2]);
+            //console.log(data[3]);
+            currentColor.style.backgroundColor =  "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
+            //background-color: rgb(202, 29, 29);
+        }
+
+
+        function sendColor(e){
+            let x = e.clientX;
+            let y = e.clientY;
+            let cursor = "Your Mouse Position Is : " + x + " and " + y;
+            console.log(cursor);
+            let myCanvas =  canvasHolder.querySelector("canvas");
+            console.log(getOffset(myCanvas).left);
+            console.log(getOffset(myCanvas).top)
+
+            let pixelX = x - getOffset(myCanvas).left;
+            let pixelY = y - getOffset(myCanvas).top;
+
+            let pixelCoordinates = "Your Mouse Position Is : " + pixelX + " and " + pixelY;
+            console.log(pixelCoordinates);
+            const {
+                data
+            } = context.getImageData(pixelX, pixelY, 1, 1);
             console.log(data[0]);
             console.log(data[1]);
             console.log(data[2]);
             console.log(data[3]);
             currentColor.style.backgroundColor =  "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
-            //background-color: rgb(202, 29, 29);
+
         }
 
 
@@ -175,28 +201,17 @@
         // set src last (recommend to use relative paths where possible)
         image.src = "assets/images/colors.png";
         //onmousemove="getPos(event)"
-        //canvas.addEventListener('onmousemove', getPos(event));
+        canvas.addEventListener('click', sendColor);
         let att = document.createAttribute("onmousemove");
         att.value = "getPos(event)";
+        //canvas.setAttributeNode(att);
+
+        att = document.createAttribute("onclick");
+        att.value = "sendColor(event)";
         canvas.setAttributeNode(att);
+
         canvasHolder.appendChild(canvas);
 
-
-
-
-
-        const myImg = new Image();
-        myImg.crossOrigin = "Anonymous";
-        myImg.onload = () => {
-            const context = document.createElement('canvas').getContext('2d');
-            context.drawImage(myImg, 0, 0);
-            const {
-                data
-            } = context.getImageData(1, 1, 1, 1);
-            console.log(data)
-        }
-        //myImg.src = 'https://picsum.photos/200/300';
-        myImg.src = 'assets/images/colors.png';
     </script>
 </body>
 

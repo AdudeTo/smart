@@ -38,5 +38,19 @@
 
         echo json_encode($newChildT, JSON_PRETTY_PRINT);
 
+    }else if($statLoad == 3){
+        $id = $_GET['id'];
+        $color = $_GET['color'];
+
+        $newChildT = [];
+        $myObj =new stdClass();
+        $myObj->id = $id;
+        $myObj->color = $color;
+        $newChildT[0] = $myObj;
+
+        $updateItems = $conn->query("UPDATE data  SET color='$color' WHERE id=$id");
+
+        echo json_encode($newChildT, JSON_PRETTY_PRINT);
+
     }
 ?>

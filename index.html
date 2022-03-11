@@ -33,21 +33,9 @@
 
 
     <script>
-        const devices = [
-            { state: "1", itemId: "0", color: "255,255,255,255", name: "Living room light" },
-            { state: "0", itemId: "1", color: "255,255,255,255", name: "Kitchen light" },
-            { state: "1", itemId: "2", color: "255,255,255,255", name: "Front door lights" },
-            { state: "0", itemId: "3", color: "255,255,255,255", name: "Garden lights" },
-        ];
-
         let apiURL = "http://tears-of-devil.com/smart/smart/api.php";
         let itemsListURL = apiURL + "?data=1";
         let dataSendURL = "";
-
-        function showData(data) {
-            console.log(data);
-
-        }
 
         fetchList((error, data) => {
             if (error) {
@@ -250,6 +238,30 @@
             currentColor.style.backgroundColor = "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
             devicesContainer.querySelector("li[data-active='1']").setAttribute("item-color", + data[0] + "," + data[1] + "," + data[2] + "," + data[3]);
 
+
+            let thisID = devicesContainer.querySelector("li[data-active='1']").getAttribute("item-id");
+            let thisColor = devicesContainer.querySelector("li[data-active='1']").getAttribute("item-color");
+
+
+            dataSendURL = apiURL + "?data=3&id=" + thisID + "&color=" +thisColor;
+
+            dataSend((error, data) => {
+                if (error) {
+                    console.log(error);
+                    //show loading
+                    //retry after 10 s max 3~5 times
+                    //if still error show OPS something is wrong !
+                } else {
+                    // printDevices(data);
+                    //let test = JSON.parse(data);
+                    //printDevices(data);
+                    console.log(data);
+                }
+            });
+
+
+
+
         }
 
 
@@ -272,7 +284,7 @@
         // set src last (recommend to use relative paths where possible)
         image.src = "assets/images/colors.png";
         //onmousemove="getPos(event)"
-        canvas.addEventListener('click', sendColor);
+        //canvas.addEventListener('click', sendColor);
         //let att = document.createAttribute("onmousemove");
         //att.value = "getPos(event)";
         //canvas.setAttributeNode(att);
@@ -284,7 +296,6 @@
         let att = document.createAttribute("onclick");
         att.value = "sendColor(event)";
         canvas.setAttributeNode(att);
-
         canvasHolder.appendChild(canvas);
 
     </script>

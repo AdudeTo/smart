@@ -80,7 +80,7 @@ let apiURL = "http://tears-of-devil.com/smart/smart/api.php";
                     //retry after 10 s max 3~5 times
                     //if still error show OPS something is wrong !
                 } else {
-                    console.log(data);
+                    //console.log(data);
                 }
             });
         };
@@ -134,9 +134,8 @@ let apiURL = "http://tears-of-devil.com/smart/smart/api.php";
             let myCanvas = canvasHolder.querySelector("canvas");
             let pixelX = x - getOffset(myCanvas).left;
             let pixelY = y - getOffset(myCanvas).top;
-
             let pixelCoordinates = "Your Mouse Position Is : " + pixelX + " and " + pixelY;
-            console.log(pixelCoordinates);
+
             const {
                 data
             } = context.getImageData(pixelX, pixelY, 1, 1);
@@ -153,7 +152,7 @@ let apiURL = "http://tears-of-devil.com/smart/smart/api.php";
                     //retry after 10 s max 3~5 times
                     //if still error show OPS something is wrong !
                 } else {
-                    console.log(data);
+                    //console.log(data);
                 }
             });
         }

@@ -176,6 +176,12 @@
 
             header.querySelector("nav").addEventListener('click', homeScreen);
 
+            let thisColor = devicesContainer.querySelector("li[data-active='1']").getAttribute("item-color");
+            currentColor.style.backgroundColor = "rgb(" + thisColor + ")";
+
+
+
+
         };
 
 

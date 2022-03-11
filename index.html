@@ -199,15 +199,15 @@
         image.src = "assets/images/colors.png";
         //onmousemove="getPos(event)"
         canvas.addEventListener('click', sendColor);
-        let att = document.createAttribute("onmousemove");
-        att.value = "getPos(event)";
-        canvas.setAttributeNode(att);
+        //let att = document.createAttribute("onmousemove");
+        //att.value = "getPos(event)";
+        //canvas.setAttributeNode(att);
         
-        att = document.createAttribute("touchmove");
-        att.value = "getPos(event)";
-        canvas.setAttributeNode(att);
+        //att = document.createAttribute("touchmove");
+        //att.value = "getPos(event)";
+        //canvas.setAttributeNode(att);
 
-        att = document.createAttribute("onclick");
+        let att = document.createAttribute("onclick");
         att.value = "sendColor(event)";
         canvas.setAttributeNode(att);
 

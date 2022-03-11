@@ -1,0 +1,25 @@
+.colors{
+    width: 90%;
+    max-width: 250px;    
+    height: auto;
+    margin: 20px auto;    
+    position: relative;
+    display: none;
+    canvas{  
+        width: 250px;         
+        aspect-ratio: 1/1;  
+        position: absolute;  
+        &:hover{
+            cursor: crosshair;
+        }
+    }
+    .currentColor{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 40px;
+        height: 40px;
+        border: solid 2px black;
+       // background-color: rgb(202, 29, 29);
+    }
+}

@@ -53,6 +53,7 @@
             console.log(element.state);
             console.log(element.name);
             let item = document.createElement("LI");
+            
             let itemSwitch = "off";
             if(element.state == "1"){
                 itemSwitch = "on";
@@ -60,7 +61,7 @@
             item.innerHTML = '<span>' + element.name + '</span><div class="switch">' + itemSwitch + '</div>';
             let att = document.createAttribute("data-stat");
             att.value = element.state;
-            item.setAttributeNode(att);
+            item.setAttributeNode(att);            
             devicesContainer.appendChild(item);
         })
 

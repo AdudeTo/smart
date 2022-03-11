@@ -14,5 +14,9 @@
 }
 @mixin icon-stat-on {
   background: url(../images/sprite.png) top left no-repeat;
-  background-position: -120px -40px;
+  background-position: -120px -40px;  
+}
+@mixin icon-back {
+  background: url(../images/sprite.png) top left no-repeat;
+  background-position: -40px 0;
 }

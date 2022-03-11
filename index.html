@@ -11,7 +11,7 @@
 
 <body>
 
-    <header class="header">
+    <header id="header" class="header--home">
         <nav>
         </nav>
         <h3>
@@ -25,53 +25,161 @@
             <ul>
             </ul>
         </section>
+        <section id="colors" class="colors">
+            <div id="currentColor" class="currentColor"></div>
+        </section>
     </main>
 
 
 
     <script>
         const devices = [
-            { state: "1", name: "Living room light" },
-            { state: "0", name: "Kitchen light" },
-            { state: "1", name: "Front door lights" },
-            { state: "0", name: "Garden lights" },
+            { state: "1", itemId: "0", color: "255,255,255", name: "Living room light" },
+            { state: "0", itemId: "1", color: "255,255,255", name: "Kitchen light" },
+            { state: "1", itemId: "2", color: "255,255,255", name: "Front door lights" },
+            { state: "0", itemId: "3", color: "255,255,255", name: "Garden lights" },
         ];
         const devicesContainer = document.getElementById("devices").querySelector("ul");
-        console.log(devicesContainer);
+        const canvasHolder = document.getElementById("colors");
+        const header = document.getElementById("header");
+        const currentColor = document.getElementById("currentColor");
+        let screenStat = 0;
 
-        function switchClick(){
-            console.log(this);
-            console.log(this.parentElement.getAttribute("data-stat"));
-            if(this.parentElement.getAttribute("data-stat") == "1"){
+        function switchClick() {
+            if (this.parentElement.getAttribute("data-stat") == "1") {
                 this.parentElement.setAttribute("data-stat", "0");
                 this.innerHTML = "off";
-
-            }else {
+            } else {
                 this.parentElement.setAttribute("data-stat", "1");
                 this.innerHTML = "on";
             }
-
         };
-        function itemSetup(){
+
+        function homeScreen() {
+            canvasHolder.style.display = "none";
+            header.querySelector("nav").removeEventListener('click', homeScreen);
+            console.log("Home");
+            let allItemsList = devicesContainer.querySelectorAll("li");
+
+            allItemsList.forEach((element) => {
+                element.removeAttribute("data-active");
+            });
+            header.classList.remove("header--item");
+            header.classList.add("header--home");
+            header.querySelector("h3").innerHTML = "My Devices";
+
+        }
+
+
+
+        function itemSetup() {
+            canvasHolder.style.display = "block";
             console.log(this);
             console.log(this.parentElement);
 
+            let allItemsList = devicesContainer.querySelectorAll("li");
+
+            allItemsList.forEach((element) => {
+                element.setAttribute("data-active", "0");
+            });
+
+            this.parentElement.setAttribute("data-active", "1");
+
+            header.classList.remove("header--home");
+            header.classList.add("header--item");
+            header.querySelector("h3").innerHTML = "Device Settings";
+
+            header.querySelector("nav").addEventListener('click', homeScreen);
+
+
+
+
         };
 
-        devices.forEach((element,key) => {
+        devices.forEach((element, key) => {
             let item = document.createElement("LI");
             let itemSwitch = "off";
-            if(element.state == "1"){
+            if (element.state == "1") {
                 itemSwitch = "on";
-            }            
-            item.innerHTML = '<span>' + element.name + '</span><div class="switch">' + itemSwitch + '</div>';
+            }
+            item.innerHTML = '<span>' + element.name + '</span><div class="switch --t05">' + itemSwitch + '</div>';
             let att = document.createAttribute("data-stat");
             att.value = element.state;
             item.setAttributeNode(att);
+            att = document.createAttribute("item-id");
+            att.value = element.itemId;
+            item.setAttributeNode(att);
+            att = document.createAttribute("item-color");
+            att.value = element.color;
+            item.setAttributeNode(att);
+            item.classList.add("--t05");
             devicesContainer.appendChild(item);
             devicesContainer.querySelectorAll("li")[key].querySelector("span").addEventListener('click', itemSetup);
             devicesContainer.querySelectorAll("li")[key].querySelector("div").addEventListener('click', switchClick);
         })
+
+        function getOffset(el) {
+            var rect = el.getBoundingClientRect();
+            return {
+                left: rect.left + window.pageXOffset,
+                top: rect.top + window.pageYOffset
+            };
+        }
+
+        function getPos(e) {
+            let x = e.clientX;
+            let y = e.clientY;
+            let cursor = "Your Mouse Position Is : " + x + " and " + y;
+            console.log(cursor);
+            let myCanvas =  canvasHolder.querySelector("canvas");
+            console.log(getOffset(myCanvas).left);
+            console.log(getOffset(myCanvas).top)
+
+            let pixelX = x - getOffset(myCanvas).left;
+            let pixelY = y - getOffset(myCanvas).top;
+
+            let pixelCoordinates = "Your Mouse Position Is : " + pixelX + " and " + pixelY;
+            console.log(pixelCoordinates);
+            const {
+                data
+            } = context.getImageData(pixelX, pixelY, 1, 1);
+            console.log(data[0]);
+            console.log(data[1]);
+            console.log(data[2]);
+            console.log(data[3]);
+            currentColor.style.backgroundColor =  "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
+            //background-color: rgb(202, 29, 29);
+        }
+
+
+
+
+
+
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext("2d");
+        canvas.id = "canvas_id";
+        canvas.className = "canvas";                  // should be className
+        canvas.height = 250;                          // should be numbers
+        canvas.width = 250;
+        var image = new Image();
+        image.onload = function () {
+            // or set canvas size = image, here: (this = currently loaded image)
+            // canvas.width = this.width;
+            // canvas.height = this.height;
+            context.drawImage(this, 0, 0);              // draw at (0,0), size = image size
+
+            // or, if you want to fill the canvas independent on image size:
+            // context.drawImage(this, 0, 0, canvas.width, canvas.height);
+        }
+        // set src last (recommend to use relative paths where possible)
+        image.src = "assets/images/colors.png";
+        //onmousemove="getPos(event)"
+        //canvas.addEventListener('onmousemove', getPos(event));
+        let att = document.createAttribute("onmousemove");
+        att.value = "getPos(event)";
+        canvas.setAttributeNode(att);
+        canvasHolder.appendChild(canvas);
 
 
 
@@ -88,7 +196,7 @@
             console.log(data)
         }
         //myImg.src = 'https://picsum.photos/200/300';
-        myImg.src = 'assets/images/test.png';
+        myImg.src = 'assets/images/colors.png';
     </script>
 </body>
 

@@ -39,6 +39,80 @@
             { state: "1", itemId: "2", color: "255,255,255,255", name: "Front door lights" },
             { state: "0", itemId: "3", color: "255,255,255,255", name: "Garden lights" },
         ];
+
+        let apiURL = "http://tears-of-devil.com/smart/smart/api.php";
+        let itemsListURL = apiURL + "?data=1";
+        let dataSendURL = "";
+
+        function showData(data) {
+            console.log(data);
+
+        }
+
+        fetchList((error, data) => {
+            if (error) {
+                console.log(error);
+                //show loading
+                //retry after 10 s max 3~5 times
+                //if still error show OPS something is wrong !
+            } else {
+                // printDevices(data);
+                //let test = JSON.parse(data);
+                printDevices(data);
+            }
+        });
+
+        function fetchList(callback) {
+            fetch(itemsListURL)
+                .then(response => response.json())
+                .then(json => callback(null, json))
+                .catch(error => callback(error, null))
+        }
+
+
+
+        function dataSend(callback) {
+            fetch(dataSendURL)
+                .then(response => response.json())
+                .then(json => callback(null, json))
+                .catch(error => callback(error, null))
+        }
+
+
+
+
+
+        function printDevices(data) {
+
+            data.forEach((element, key) => {
+                let item = document.createElement("LI");
+                let itemSwitch = "off";
+                if (element.state == "1") {
+                    itemSwitch = "on";
+                }
+                item.innerHTML = '<span>' + element.name + '</span><div class="switch --t05">' + itemSwitch + '</div>';
+                let att = document.createAttribute("data-stat");
+                att.value = element.state;
+                item.setAttributeNode(att);
+                att = document.createAttribute("item-id");
+                att.value = element.itemId;
+                item.setAttributeNode(att);
+                att = document.createAttribute("item-color");
+                att.value = element.color;
+                item.setAttributeNode(att);
+                item.classList.add("--t05");
+                devicesContainer.appendChild(item);
+                devicesContainer.querySelectorAll("li")[key].querySelector("span").addEventListener('click', itemSetup);
+                devicesContainer.querySelectorAll("li")[key].querySelector("div").addEventListener('click', switchClick);
+            })
+
+        }
+
+
+
+
+
+
         const devicesContainer = document.getElementById("devices").querySelector("ul");
         const canvasHolder = document.getElementById("colors");
         const header = document.getElementById("header");
@@ -53,6 +127,29 @@
                 this.parentElement.setAttribute("data-stat", "1");
                 this.innerHTML = "on";
             }
+
+            let thisID = this.parentElement.getAttribute("item-id");
+            let thisStat = this.parentElement.getAttribute("data-stat");
+
+
+            dataSendURL = apiURL + "?data=2&id=" + thisID + "&stat=" +thisStat;
+
+            dataSend((error, data) => {
+            if (error) {
+                console.log(error);
+                //show loading
+                //retry after 10 s max 3~5 times
+                //if still error show OPS something is wrong !
+            } else {
+                // printDevices(data);
+                //let test = JSON.parse(data);
+                //printDevices(data);
+                console.log(data);
+            }
+        });
+
+
+
         };
 
         function homeScreen() {
@@ -91,32 +188,9 @@
 
             header.querySelector("nav").addEventListener('click', homeScreen);
 
-
-
-
         };
 
-        devices.forEach((element, key) => {
-            let item = document.createElement("LI");
-            let itemSwitch = "off";
-            if (element.state == "1") {
-                itemSwitch = "on";
-            }
-            item.innerHTML = '<span>' + element.name + '</span><div class="switch --t05">' + itemSwitch + '</div>';
-            let att = document.createAttribute("data-stat");
-            att.value = element.state;
-            item.setAttributeNode(att);
-            att = document.createAttribute("item-id");
-            att.value = element.itemId;
-            item.setAttributeNode(att);
-            att = document.createAttribute("item-color");
-            att.value = element.color;
-            item.setAttributeNode(att);
-            item.classList.add("--t05");
-            devicesContainer.appendChild(item);
-            devicesContainer.querySelectorAll("li")[key].querySelector("span").addEventListener('click', itemSetup);
-            devicesContainer.querySelectorAll("li")[key].querySelector("div").addEventListener('click', switchClick);
-        })
+
 
         function getOffset(el) {
             var rect = el.getBoundingClientRect();
@@ -131,7 +205,7 @@
             let y = e.clientY;
             let cursor = "Your Mouse Position Is : " + x + " and " + y;
             console.log(cursor);
-            let myCanvas =  canvasHolder.querySelector("canvas");
+            let myCanvas = canvasHolder.querySelector("canvas");
             console.log(getOffset(myCanvas).left);
             console.log(getOffset(myCanvas).top)
 
@@ -147,17 +221,17 @@
             //console.log(data[1]);
             //console.log(data[2]);
             //console.log(data[3]);
-            currentColor.style.backgroundColor =  "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
+            currentColor.style.backgroundColor = "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
             //background-color: rgb(202, 29, 29);
         }
 
 
-        function sendColor(e){
+        function sendColor(e) {
             let x = e.clientX;
             let y = e.clientY;
             let cursor = "Your Mouse Position Is : " + x + " and " + y;
             console.log(cursor);
-            let myCanvas =  canvasHolder.querySelector("canvas");
+            let myCanvas = canvasHolder.querySelector("canvas");
             console.log(getOffset(myCanvas).left);
             console.log(getOffset(myCanvas).top)
 
@@ -173,7 +247,7 @@
             console.log(data[1]);
             console.log(data[2]);
             console.log(data[3]);
-            currentColor.style.backgroundColor =  "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
+            currentColor.style.backgroundColor = "rgb(" + data[0] + "," + data[1] + "," + data[2] + "," + data[3] + ")";
             devicesContainer.querySelector("li[data-active='1']").setAttribute("item-color", + data[0] + "," + data[1] + "," + data[2] + "," + data[3]);
 
         }
@@ -202,7 +276,7 @@
         //let att = document.createAttribute("onmousemove");
         //att.value = "getPos(event)";
         //canvas.setAttributeNode(att);
-        
+
         //att = document.createAttribute("touchmove");
         //att.value = "getPos(event)";
         //canvas.setAttributeNode(att);
